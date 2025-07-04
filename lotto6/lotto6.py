@@ -1,7 +1,8 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
-from lotto6.pages.contact import * # noqa -> importing pages to be used in the app
+from lotto6.contact import *
+from lotto6.pages import * # noqa -> importing pages to be used in the app
 
 from rxconfig import config
 
@@ -36,11 +37,11 @@ def index() -> rx.Component:
                 size="5",
             ),
             rx.link(
-                rx.button("Contact"),
-                href="/contact",
+                rx.button("Kontakt"),
+                href="/kontakt",
                 is_external=False  ,
             ),
-            rx.button("Click Me", on_click=State.toggle_title),
+            rx.button("Hier Klicken", on_click=State.toggle_title),
             spacing="5",
             justify="center",
             min_height="85vh",
@@ -51,4 +52,3 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index, route="/")
-app.add_page(contact_page, route="/contact")

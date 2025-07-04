@@ -11,18 +11,18 @@ def page_layout(children: rx.Component, title: str =None) -> rx.Component:
                 children,
             ),
             rx.link(
-                rx.button("Home"),
+                rx.button("Startseite"),
                 href="/",
                 is_external=False  ,
             ),
             rx.link(
-                rx.button("About Us"),
-                href="/about",
+                rx.button("Über uns"),
+                href="/ueber-uns",
                 is_external=False  ,
             ),
             rx.link(
-                rx.button("Contact Us"),
-                href="/contact",
+                rx.button("Kontakt"),
+                href="/kontakt",
                 is_external=False  ,
             ),
             spacing="5",
