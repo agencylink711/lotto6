@@ -1,8 +1,11 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
+"""Main entry point for the Lotto6aus49 application."""
 
 import reflex as rx
-from lotto6.contact import *
-from lotto6.pages import * # noqa -> importing pages to be used in the app
+from lotto6.contact import contact_page
+from lotto6.pages import about_page
+from lotto6.layout import root_layout
+from lotto6.state import State
+from lotto6.ui.nav import navbar
 
 from rxconfig import config
 
@@ -26,27 +29,20 @@ class State(rx.State):
 
 
 def index() -> rx.Component:
-    # Welcome Page (Index)
-    return rx.container(
-        rx.color_mode.button(position="top-right"),
+    """Welcome Page (Index)."""
+    return root_layout(
         rx.vstack(
             rx.heading(State.title, size="9"),
             rx.text(
-                "Count: ",
+                "Zähler: ",
                 State.click_count,
                 size="5",
             ),
-            rx.link(
-                rx.button("Kontakt"),
-                href="/kontakt",
-                is_external=False  ,
-            ),
             rx.button("Hier Klicken", on_click=State.toggle_title),
             spacing="5",
-            justify="center",
-            min_height="85vh",
+            align_items="center",
+            padding_y="2em",
         ),
-        rx.logo(),
     )
 
 

@@ -7,6 +7,5 @@ from lotto6.pages.layout import page_layout
 def about_page() -> rx.Component:
     return page_layout(
         rx.text("Hier mit Lotto6aus49 können Sie Ihre Glückszahlen wählen und auf den großen Gewinn hoffen!"),
-        title="Über Lotto6aus49"
+        title="Über LottoamSamstag"
     )
-
