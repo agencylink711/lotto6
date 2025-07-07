@@ -9,10 +9,14 @@ dependencies = [
     "numpy>=2.3.1",
     "pandas>=2.3.0",
     "psycopg[binary]>=3.2.9",
+    "psycopg2-binary>=2.9.9",
     "python-dotenv>=1.1.1",
     "reflex>=0.8.0",
     "seaborn>=0.13.2",
 ]
+
+[tool.setuptools]
+packages = ["lotto6"]
 
 [dependency-groups]
 dev = [
