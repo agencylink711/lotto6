@@ -12,7 +12,7 @@ from rxconfig import config
 
 class State(rx.State):
     """The app state."""
-    title: str = "Willkommen bei Lotto6aus49!"
+    title: str = "Willkommen bei LottoAmSamstag!"
     og_title: str = "Lotto6aus49 - Das offizielle Lotto-Spiel"
     new_title: str = "Lotto6aus49! FÜR ALLE, DIE GEWINNEN WOLLEN!"
     click_count: int = 0
