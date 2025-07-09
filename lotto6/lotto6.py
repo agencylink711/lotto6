@@ -1,6 +1,7 @@
 """Main entry point for the Lotto6aus49 application."""
 
 import reflex as rx
+import reflex_clerk_api as reclerk
 from lotto6.contact import contact_page
 from lotto6.pages import about_page
 from lotto6.layout import root_layout
@@ -29,10 +30,18 @@ class State(rx.State):
 
 
 def index() -> rx.Component:
+    
     """Welcome Page (Index)."""
+
+    welcome_message = rx.cond(
+        reclerk.ClerkState.is_signed_in, 
+        f"Hallo und Herzlich Willkommen {reclerk.ClerkUser.first_name}!", 
+        State.title)
+    
+    reclerk.ClerkUser
     return root_layout(
         rx.vstack(
-            rx.heading(State.title, size="9"),
+            rx.heading(welcome_message, size="9"),
             rx.text(
                 "Zähler: ",
                 State.click_count,
