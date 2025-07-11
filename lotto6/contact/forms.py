@@ -1,18 +1,29 @@
 import reflex as rx
 from .state import ContactState
+from lotto6.schemas.contact import ContactMessageCreate
 
 
 def form_field(
-    label: str, placeholder: str, type: str, name: str
+    label: str, placeholder: str, type: str, name: str, required: bool = True
 ) -> rx.Component:
     return rx.form.field(
         rx.flex(
             rx.form.label(label),
             rx.form.control(
                 rx.input(
-                    placeholder=placeholder, type=type
+                    placeholder=placeholder, 
+                    type=type,
+                    required=required
                 ),
                 as_child=True,
+            ),
+            rx.form.message(
+                match="valueMissing",
+                text=f"{label} ist erforderlich"
+            ),
+            rx.form.message(
+                match="typeMismatch",
+                text=f"Bitte geben Sie eine gültige {label.lower()} ein"
             ),
             direction="column",
             spacing="1",
@@ -81,9 +92,10 @@ def contact_form() -> rx.Component:
                         ),
                         form_field(
                             label="Mobile Nummer",
-                            placeholder="Mobile Nummer",
+                            placeholder="+491632473905",
                             type="tel",
-                            name="phone"
+                            name="phone",
+                            required=False
                         ),
                         spacing="3",
                         flex_direction=[
@@ -117,7 +129,7 @@ def contact_form() -> rx.Component:
                     spacing="2",
                     width="100%",
                 ),
-                on_submit=ContactState.save_contact,
+                on_submit=ContactState.handle_form_submit,
                 reset_on_submit=True,
             ),
             width="100%",

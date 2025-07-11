@@ -4,8 +4,9 @@ from sqlmodel import Field
 from datetime import datetime
 from typing import Optional
 
+
 class ContactFormMessage(rx.Model, table=True):
-    """Simple model for storing contact form submissions"""
+    """Database model for storing contact form submissions"""
     
     # Form fields
     first_name: str
@@ -14,7 +15,7 @@ class ContactFormMessage(rx.Model, table=True):
     phone: Optional[str] = None
     message: str
     
-    user_id: int | None = Field(default=None, index=True)
+    user_id: str | None = Field(default=None, index=True)
 
     # Auto timestamps
     created_at: datetime = Field(
