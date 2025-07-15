@@ -27,6 +27,7 @@ if config.config_file_name is not None:
 # Import all models to ensure they are registered with SQLModel
 from lotto6.models.contact import ContactFormMessage
 from lotto6.models.user import User
+from lotto6.models.lotto6aus49_draw_model import Lotto6aus49Draw
 
 # Use Reflex's metadata for autogenerate
 target_metadata = rx.Model.metadata
