@@ -7,16 +7,19 @@ Models are organized by domain:
 - User: Clerk user authentication data
 - Lotto6aus49Draw: Lottery draw results and data
 - AnalysisModel: Saved lottery number analysis results
+- SimulationModel: Saved lottery number simulation results and configurations
 """
 
 from .contact import ContactFormMessage
 from .user import User
 from .lotto6aus49_draw_model import Lotto6aus49Draw
 from .analysis import AnalysisModel
+from .simulation import SimulationModel
 
 __all__ = [
     "ContactFormMessage", 
     "User",
     "Lotto6aus49Draw",
     "AnalysisModel",
+    "SimulationModel",
 ]
