@@ -5,7 +5,7 @@ This module provides validation schemas for lottery draw data input,
 ensuring data integrity before database storage.
 """
 
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from datetime import date as Date
 from typing import Optional
 import re
@@ -29,7 +29,8 @@ class Lotto6aus49DrawCreate(BaseModel):
     spiel77: str = Field(..., max_length=20, description="Spiel77 numbers (e.g., '3 1 6 8 5 3 4')")
     super6: str = Field(..., max_length=15, description="Super6 numbers (e.g., '8 5 3 8 4 9')")
     
-    @validator('draw_day')
+    @field_validator('draw_day')
+    @classmethod
     def validate_draw_day(cls, v):
         """Validate that draw_day is either 'Samstag' or 'Mittwoch'."""
         allowed_days = ['Samstag', 'Mittwoch']
@@ -37,7 +38,8 @@ class Lotto6aus49DrawCreate(BaseModel):
             raise ValueError(f'draw_day must be one of {allowed_days}, got: {v}')
         return v
     
-    @validator('numbers')
+    @field_validator('numbers')
+    @classmethod
     def validate_numbers(cls, v):
         """
         Validate lottery numbers format and content.
@@ -76,7 +78,8 @@ class Lotto6aus49DrawCreate(BaseModel):
         
         return v
     
-    @validator('spiel77')
+    @field_validator('spiel77')
+    @classmethod
     def validate_spiel77(cls, v):
         """
         Validate Spiel77 format.
@@ -104,7 +107,8 @@ class Lotto6aus49DrawCreate(BaseModel):
         
         return v
     
-    @validator('super6')
+    @field_validator('super6')
+    @classmethod
     def validate_super6(cls, v):
         """
         Validate Super6 format.
@@ -139,7 +143,7 @@ class Lotto6aus49DrawCreate(BaseModel):
             Date: lambda v: v.isoformat()
         }
         # Example for documentation
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "date": "2025-06-21",
                 "draw_day": "Samstag",
@@ -164,9 +168,3 @@ class Lotto6aus49DrawUpdate(BaseModel):
     super_number: Optional[int] = Field(None, ge=0, le=9, description="Super number (0-9)")
     spiel77: Optional[str] = Field(None, max_length=20, description="Spiel77 numbers")
     super6: Optional[str] = Field(None, max_length=15, description="Super6 numbers")
-    
-    # Use the same validators as creation schema
-    _validate_draw_day = validator('draw_day', allow_reuse=True)(Lotto6aus49DrawCreate.validate_draw_day)
-    _validate_numbers = validator('numbers', allow_reuse=True)(Lotto6aus49DrawCreate.validate_numbers)
-    _validate_spiel77 = validator('spiel77', allow_reuse=True)(Lotto6aus49DrawCreate.validate_spiel77)
-    _validate_super6 = validator('super6', allow_reuse=True)(Lotto6aus49DrawCreate.validate_super6)

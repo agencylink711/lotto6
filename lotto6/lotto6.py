@@ -3,9 +3,9 @@
 import reflex as rx
 import reflex_clerk_api as reclerk
 from lotto6.contact import contact_page
-from lotto6.pages import about_page
+from lotto6.pages import about_page, dienstleistungen_page
+from lotto6.pages.auth import sign_in_page, sign_up_page, sign_out_page
 from lotto6.layout import root_layout
-from lotto6.state import State
 from lotto6.ui.nav import navbar
 
 from rxconfig import config
@@ -57,3 +57,9 @@ def index() -> rx.Component:
 
 app = rx.App()
 app.add_page(index, route="/")
+app.add_page(about_page, route="/ueber-uns")
+app.add_page(dienstleistungen_page, route="/dienstleistungen") 
+app.add_page(contact_page, route="/kontakt")
+app.add_page(sign_in_page, route="/anmelden")
+app.add_page(sign_up_page, route="/registrieren") 
+app.add_page(sign_out_page, route="/abmelden")
