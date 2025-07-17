@@ -4,51 +4,71 @@ from lotto6.state.user_state import UserState
 
 def navbar_link(text: str, url: str) -> rx.Component:
     return rx.link(
-        rx.text(text, size="4", weight="medium"), 
+        rx.text(
+            text, 
+            size="3", 
+            weight="medium",
+            color="gray.700",
+        ), 
         href=url,
         is_external=False,
-        color="black",
-        _hover={"color": "gray.600"},
+        _hover={
+            "color": "blue.600",
+            "text_decoration": "none",
+        },
+        padding_x="4",
+        padding_y="2",
+        border_radius="md",
+        transition="all 0.2s",
+        _hover_bg="blue.50",
     )
 
-
-def navbar() -> rx.Component:
+def top_menu() -> rx.Component:
+    """Top utility bar with logo and authentication"""
     return rx.box(
-        rx.desktop_only(
+        rx.container(
             rx.hstack(
-                rx.hstack(
-                    rx.link(
-                        rx.heading(
-                            "LottoAmSamstag",
-                            size="7",
-                            weight="bold"
-                        ),
-                        href="/",
-                        color="black",
-                        _hover={"color": "blue.500"},
+                # Left side - Logo
+                rx.link(
+                    rx.heading(
+                        "LottoAmSamstag",
+                        size="6",
+                        weight="bold",
+                        color="blue.600",
                     ),
-                    align_items="center",
-                    spacing="8",
+                    href="/",
+                    _hover={"text_decoration": "none"},
                 ),
+                
+                rx.spacer(),  # Push auth content to the right
+                
                 rx.hstack(
-                    navbar_link("Startseite", "/"),
-                    navbar_link("Über uns", "/ueber-uns"),
-                    navbar_link("Dienstleistungen", "/dienstleistungen"),
-                    navbar_link("Kontakt", "/kontakt"),
                     # Auth navigation - signed out users
                     reclerk.signed_out(
                         rx.hstack(
-                            navbar_link("Anmelden", "/anmelden"),
+                            rx.link(
+                                rx.button(
+                                    "Anmelden",
+                                    variant="ghost",
+                                    size="1",
+                                    color="gray.700",
+                                    _hover={"bg": "blue.50", "color": "blue.600"},
+                                ),
+                                href="/anmelden",
+                            ),
                             rx.link(
                                 rx.button(
                                     "Registrieren",
-                                    bg="black",
+                                    variant="solid",
+                                    size="1",
+                                    bg="blue.500",
                                     color="white",
-                                    _hover={"bg": "gray.800"}
+                                    _hover={"bg": "blue.600"},
                                 ),
                                 href="/registrieren",
                             ),
                             spacing="3",
+                            align="center",
                         )
                     ),
                     # Auth navigation - signed in users
@@ -57,86 +77,135 @@ def navbar() -> rx.Component:
                             rx.text(
                                 rx.cond(
                                     reclerk.ClerkUser.first_name,
-                                    f"Hallo, {reclerk.ClerkUser.first_name}",
-                                    "Hallo"
+                                    f"Willkommen, {reclerk.ClerkUser.first_name}",
+                                    "Willkommen"
                                 ),
+                                size="2",
+                                weight="medium",
                                 color="gray.700",
-                                font_weight="500",
                             ),
-                            navbar_link("Abmelden", "/abmelden"),
-                            spacing="3",
+                            rx.link(
+                                rx.button(
+                                    "Abmelden",
+                                    variant="ghost",
+                                    size="1",
+                                    color="gray.600",
+                                    _hover={"bg": "red.50", "color": "red.600"},
+                                ),
+                                href="/abmelden",
+                            ),
+                            spacing="4",
                             align="center",
                         )
                     ),
-                    justify="end",
-                    spacing="5",
+                    spacing="4",
+                    align="center",
                 ),
                 justify="between",
-                align_items="center",
+                align="center",
+                width="100%",
             ),
-            width="100%",
-            padding_x="4",
-            padding_y="3",
-            position="sticky",
-            top="0",
-            z_index="999",
+            max_width="1200px",
         ),
-        rx.mobile_and_tablet(
+        bg="gray.50",
+        border_bottom="1px solid",
+        border_color="gray.200",
+        padding_y="3",
+        width="100%",
+    )
+
+def main_menu() -> rx.Component:
+    """Main navigation bar with menu items"""
+    return rx.box(
+        rx.container(
             rx.hstack(
+                rx.spacer(),  # Push menu items to the right
+                
+                # Right side - Main Menus
                 rx.hstack(
-                    rx.link(
-                        rx.heading(
-                            "Lotto6aus49",
-                            size="6",
-                            weight="bold"
-                        ),
-                        href="/",
-                        color="black",
-                        _hover={"color": "blue.500"},
-                    ),
+                    navbar_link("Über uns", "/ueber-uns"),
+                    navbar_link("Dienstleistungen", "/dienstleistungen"),
+                    navbar_link("Kontakt", "/kontakt"),
+                    spacing="8",
                     align_items="center",
                 ),
-                rx.menu.root(
-                    rx.menu.trigger(
-                        rx.icon("menu", size=30)
-                    ),
-                    rx.menu.content(
-                        rx.menu.item(
-                            rx.link("Startseite", href="/", color="black", _hover={"color": "gray.600"})
-                        ),
-                        rx.menu.item(
-                            rx.link("Über uns", href="/ueber-uns", color="black", _hover={"color": "gray.600"})
-                        ),
-                        rx.menu.item(
-                            rx.link("Dienstleistungen", href="/dienstleistungen", color="black", _hover={"color": "gray.600"})
-                        ),
-                        rx.menu.item(
-                            rx.link("Kontakt", href="/kontakt", color="black", _hover={"color": "gray.600"})
-                        ),
-                        # Conditional menu items for auth
-                        rx.cond(
-                            reclerk.ClerkState.is_signed_in,
-                            # Signed in menu items
-                            rx.menu.item(
-                                rx.link("Abmelden", href="/abmelden", color="black", _hover={"color": "gray.600"})
-                            ),
-                            # Signed out menu items
-                            rx.fragment(
-                                rx.menu.item(
-                                    rx.link("Anmelden", href="/anmelden", color="black", _hover={"color": "gray.600"})
-                                ),
-                                rx.menu.item(
-                                    rx.link("Registrieren", href="/registrieren", color="black", _hover={"color": "gray.600"})
-                                ),
-                            )
-                        ),
-                    ),
-                    justify="end",
-                ),
-                justify="between",
+                
+                justify="end",
                 align_items="center",
+                width="100%",
             ),
+            max_width="1200px",
         ),
-        padding="1em",
+        bg="white",
+        border_bottom="2px solid",
+        border_color="blue.100",
+        padding_y="4",
         width="100%",
+    )
+
+
+def navbar() -> rx.Component:
+    return rx.box(
+        # Desktop navigation
+        rx.desktop_only(
+            rx.fragment(
+                top_menu(),
+                main_menu(),
+            )
+        ),
+        
+        # Mobile navigation
+        rx.mobile_and_tablet(
+            rx.box(
+                # Top menu for mobile
+                top_menu(),
+                
+                # Main mobile navbar
+                rx.box(
+                    rx.container(
+                        rx.hstack(
+                            rx.spacer(),  # Push hamburger menu to the right
+                            
+                            # Hamburger menu
+                            rx.menu.root(
+                                rx.menu.trigger(
+                                    rx.button(
+                                        rx.icon("menu", size=24),
+                                        variant="ghost",
+                                        size="3",
+                                        color="gray.700",
+                                    )
+                                ),
+                                rx.menu.content(
+                                    rx.menu.item(
+                                        rx.link("Über uns", href="/ueber-uns", color="black", _hover={"color": "blue.600"})
+                                    ),
+                                    rx.menu.item(
+                                        rx.link("Dienstleistungen", href="/dienstleistungen", color="black", _hover={"color": "blue.600"})
+                                    ),
+                                    rx.menu.item(
+                                        rx.link("Kontakt", href="/kontakt", color="black", _hover={"color": "blue.600"})
+                                    ),
+                                ),
+                            ),
+                            
+                            justify="end",
+                            align_items="center",
+                            width="100%",
+                        ),
+                        max_width="1200px",
+                    ),
+                    bg="white",
+                    padding_y="3",
+                    border_bottom="2px solid",
+                    border_color="blue.100",
+                ),
+            )
+        ),
+        
+        position="sticky",
+        top="0",
+        z_index="999",
+        width="100%",
+        box_shadow="0 2px 4px rgba(0,0,0,0.1)",
     )
