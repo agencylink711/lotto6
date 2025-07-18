@@ -7,7 +7,17 @@ from lotto6.pages import about_page, dienstleistungen_page
 from lotto6.pages.auth import sign_in_page, sign_up_page, sign_out_page
 from lotto6.layout import root_layout
 from lotto6.providers import my_clerk_provider_args  # Import Clerk args
-from lotto6.ui.nav import navbar
+from lotto6.ui import (
+    front_page_hero_section,
+    front_page_frequency_analysis_preview,
+    front_page_collapsible_info,
+    front_page_services_grid,
+    front_page_news_section,
+    front_page_why_platform,
+    front_page_quick_access,
+    front_page_contact_support,
+    front_page_disclaimer,
+)
 
 from rxconfig import config
 
@@ -32,64 +42,44 @@ class State(rx.State):
 
 def index() -> rx.Component:
     """
-    Welcome page with conditional content based on authentication.
+    Enhanced front page with comprehensive content sections.
     
-    Demonstrates the Clerk API wrapped everywhere with user-aware content
-    and the dual layout system in action.
+    Features hero section, frequency analysis preview, collapsible info,
+    services grid, news section, platform benefits, quick access, and disclaimer.
     """
-    
-    # Personalized welcome message using Clerk state (API wrapped everywhere)
-    welcome_message = rx.cond(
-        reclerk.ClerkState.is_signed_in, 
-        rx.heading(
-            rx.text("Hallo ", reclerk.ClerkUser.first_name, "! Willkommen zurück bei LottoAmSamstag!"),
-            size="9"
-        ),
-        rx.heading(State.title, size="9")
-    )
     
     return root_layout(
         rx.vstack(
-            # Dynamic heading based on auth status
-            welcome_message,
+            # Hero section with conditional CTAs
+            front_page_hero_section(),
             
-            # Click counter
-            rx.text(
-                "Zähler: ",
-                State.click_count,
-                size="5",
-            ),
+            # Frequency analysis preview with placeholder chart
+            front_page_frequency_analysis_preview(),
             
-            # Interactive button
-            rx.button("Hier Klicken", on_click=State.toggle_title),
+            # Collapsible information section
+            front_page_collapsible_info(),
             
-            # Layout indicator showing which layout is active
-            rx.cond(
-                reclerk.ClerkState.is_signed_in,
-                rx.card(
-                    rx.vstack(
-                        rx.text("✅ Angemeldet", color="green", weight="bold"),
-                        rx.text("Aktives Layout: user_layout", size="2"),
-                        rx.text("Email: ", reclerk.ClerkUser.email_address, size="2"),
-                        rx.text("Clerk API: Überall verfügbar", size="1", color="blue"),
-                        spacing="2"
-                    ),
-                    size="2"
-                ),
-                rx.card(
-                    rx.vstack(
-                        rx.text("ℹ️ Nicht angemeldet", color="gray", weight="bold"),
-                        rx.text("Aktives Layout: non_user_layout", size="2"),
-                        rx.text("Clerk API: Überall verfügbar", size="1", color="blue"),
-                        spacing="2"
-                    ),
-                    size="2"
-                )
-            ),
+            # Services grid
+            front_page_services_grid(),
             
-            spacing="5",
+            # News section
+            front_page_news_section(),
+            
+            # Platform benefits
+            front_page_why_platform(),
+            
+            # Quick access section
+            front_page_quick_access(),
+            
+            # Contact support
+            front_page_contact_support(),
+            
+            # Disclaimer
+            front_page_disclaimer(),
+            
+            width="100%",
+            spacing="8",
             align_items="center",
-            padding_y="2em",
         ),
     )
 

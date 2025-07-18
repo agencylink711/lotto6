@@ -1,6 +1,6 @@
 import reflex as rx
 from lotto6.ui.nav import navbar
-
+from lotto6.ui.sidebar import user_sidebar
 from lotto6 import providers
 
 """
@@ -26,7 +26,7 @@ def non_user_layout(child: rx.Component) -> rx.Component:
     return rx.container(
         navbar(),
         rx.fragment(child),
-        rx.logo(),
+        # rx.logo(),
         width="100%",
         max_width="1200px",
         margin="0 auto",
@@ -37,19 +37,73 @@ def non_user_layout(child: rx.Component) -> rx.Component:
 
 def user_layout(child: rx.Component) -> rx.Component:
     """
-    Layout for authenticated users.
+    Layout for authenticated users with sidebar.
     
-    For now, same structure as non_user_layout but with different ID.
-    Ready for sidebar integration when needed (no sidebar yet as requested).
+    Implements a proper sidebar layout with:
+    - Fixed navbar at top
+    - Sidebar on the left (desktop only)
+    - Main content area on the right
+    - Responsive mobile layout
     """
-    return rx.container(
+    return rx.box(
+        # Fixed navbar at the top
         navbar(),
-        rx.fragment(child),
-        rx.logo(),
+        
+        # Main content area with sidebar
+        rx.box(
+            # Desktop layout with sidebar
+            rx.desktop_only(
+                rx.hstack(
+                    # Sidebar - fixed width on the left
+                    rx.box(
+                        user_sidebar(),
+                        width="16em",
+                        height="calc(100vh - 120px)",  # Account for navbar height
+                        position="sticky",
+                        top="120px",  # Position below navbar
+                        overflow_y="auto",
+                        flex_shrink="0",  # Don't shrink the sidebar
+                    ),
+                    
+                    # Main content area
+                    rx.box(
+                        rx.container(
+                            rx.fragment(child),
+                            max_width="1200px",
+                            width="100%",
+                            padding="2em",
+                        ),
+                        flex="1",  # Take remaining space
+                        min_width="0",  # Allow content to shrink
+                        overflow_x="auto",  # Handle wide content
+                    ),
+                    
+                    spacing="0",
+                    align="start",
+                    width="100%",
+                    min_height="calc(100vh - 120px)",
+                )
+            ),
+            
+            # Mobile layout without sidebar
+            rx.mobile_and_tablet(
+                rx.container(
+                    rx.fragment(child),
+                    max_width="100%",
+                    width="100%",
+                    padding="1em",
+                )
+            ),
+        ),
+        
+        # Footer with logo
+        # rx.center(
+        #     rx.logo(),
+        #     padding="2em",
+        # ),
+        
         width="100%",
-        max_width="1200px",
-        margin="0 auto",
-        padding="1em",
+        min_height="100vh",
         id="user-layout"
     )
 
